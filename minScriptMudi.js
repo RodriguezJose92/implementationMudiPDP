@@ -139,7 +139,6 @@ const experienceMudi = ({
             div.innerHTML=`
                 <div class="contentModal3D">
                     <img src="https://mudi.com.co/cliente/${idCompany}/closeModal.webp" alt="closeModalMudi" type="image/webp" class="closeModal" width:50px>
-                    <h1 class="nameSkuMudi">${name}</h1>
                     <iframe class="iframeMudi3D" src="${link3D}"></iframe>
                     <img class="powerByMudi3D" src="https://mudi.com.co/Assets/SVG/powerByMudi.webp" type="image/webp" alt="Power By Mudi">
                 </div>
