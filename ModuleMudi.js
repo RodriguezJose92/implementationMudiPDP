@@ -70,8 +70,7 @@ export const experienceMudi = ({
         let loadBtn = ['false','false']
 
         const link = document.createElement('LINK');
-        /* link.href=`https://mudi.com.co/module/mudi/index.css`; */
-        link.href =`./index.css`
+        link.href=`https://mudi.com.co/module/mudi/index.css`;
         link.setAttribute('rel','stylesheet');
 
         document.head.appendChild(link);
