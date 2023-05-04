@@ -17,6 +17,7 @@ export const experienceMudi = ({
     zindexBTN           = 90 ,
     zindexModal         = 99 ,
     flexDirectionBtns   = 'column',
+    color               = null ,
 
     // Visibilidad ToolTip
     viewToolTip         = true,
@@ -70,7 +71,8 @@ export const experienceMudi = ({
         let loadBtn = ['false','false']
 
         const link = document.createElement('LINK');
-        link.href=`https://mudi.com.co/module/mudi/index.css`;
+        link.href=`https://mudi.com.co/module/mudi/index.css`; 
+        // link.href =`./index.css`
         link.setAttribute('rel','stylesheet');
 
         document.head.appendChild(link);
@@ -79,7 +81,7 @@ export const experienceMudi = ({
         div.classList.add( 'containerBtnsMudi' );
 
         div.innerHTML = ` 
-        <div class="tooltipMudiContainer" style="z-index:${zindexBTN}; flex-direction:${flexDirectionBtns}">
+        <div class="tooltipMudiContainer" style="z-index:${zindexBTN}; flex-direction:${flexDirectionBtns}" idCompany="${idCompany}">
             <img sku="${numberSku}" class="imgBtn3D" id="img3DBtn" src="https://mudi.com.co/cliente/${idCompany}/btn3D.webp" alt="btnMudi3D">
             <img sku="${numberSku}" class="imgBtnAR" id="imgARBtn" src="https://mudi.com.co/cliente/${idCompany}/btnAR.webp" alt="btnMudiAR">   
         </div>
@@ -110,10 +112,11 @@ export const experienceMudi = ({
     /* Tooltips */
     function createToolTip(div){
         const p = document.createElement('P');
-        p.classList.add('tooltipMudi')
+        p.classList.add('tooltipMudi') ; 
         p.innerHTML=`<b>¡Nuevo!</b> prueba nuestras experiencias de 3D y Realidad Aumentada`;
+        flexDirectionBtns == 'column' ? p.setAttribute('style','top:-50%') : p.setAttribute('style','top:-100%')
         div.querySelector('.tooltipMudiContainer').appendChild(p);
-        setInterval(()=>hideToolTip(div),intervaleTime)
+        setInterval(()=>hideToolTip(div),intervaleTime);
     }
 
     function hideToolTip(div){
@@ -138,7 +141,7 @@ export const experienceMudi = ({
 
             div.innerHTML=`
                 <div class="contentModal3D">
-                    <img src="https://mudi.com.co/cliente/${idCompany}/closeModal.webp" alt="closeModalMudi" type="image/webp" class="closeModal" width:50px>
+                    <img src="https://mudi.com.co/cliente/${idCompany}/closeModal.webp" alt="closeModalMudi" type="image/webp" class="closeModal">
                     <iframe class="iframeMudi3D" src="${link3D}"></iframe>
                     <img class="powerByMudi3D" src="https://mudi.com.co/Assets/SVG/powerByMudi.webp" type="image/webp" alt="Power By Mudi">
                 </div>
@@ -147,8 +150,6 @@ export const experienceMudi = ({
             div.querySelector('.powerByMudi3D').addEventListener('click',()=> window.open('https://mudi.com.co','_BLANK'), false) ;
             div.querySelector('.closeModal').addEventListener('click',()=> document.querySelector('.windowModalMudi').remove() , false) ;
             document.body.appendChild(div) ;
-
-            document.querySelector('windowModalMudi').addEventListener('click',()=> document.querySelector('.windowModalMudi').remove() , false );
 
         };
 
@@ -160,7 +161,7 @@ export const experienceMudi = ({
 
             div.innerHTML=`
                 <div class="contentModalAR">
-                    <img src="https://mudi.com.co/cliente/${idCompany}/closeModal.webp" alt="closeModalMudi" type="image/webp" class="closeModal" width:50px>
+                    <img src="https://mudi.com.co/cliente/${idCompany}/closeModal.webp" alt="closeModalMudi" type="image/webp" class="closeModal">
                     <h2 class="modalTitleMudi">Recomendaciones para ver el producto en Realidad Aumentada.</h2>
 
                     <div class="principalContentModalAR">
@@ -199,7 +200,7 @@ export const experienceMudi = ({
                                 </div>
                             </div>
 
-                            <button class="initARMudi">Iniciar AR</button>
+                            <button class="initARMudi" style="background-color:${color}">Iniciar AR</button>
 
                         </div>
 
@@ -214,9 +215,7 @@ export const experienceMudi = ({
                 </div>
             `;
 
-            div.querySelector('.closeModal').addEventListener('click',()=>{
-                document.querySelector('.windowModalMudi').remove();
-            }, false) ;
+            div.querySelector('.closeModal').addEventListener('click',()=> document.querySelector('.windowModalMudi').remove(), false) ;
 
             /* Determinamos que codigo QR se va a visualizar */ 
             linkQRAD == null || linkQRAD == undefined || linkQRAD =='' ?  createQRnormal() :  createQRAdvanced();
