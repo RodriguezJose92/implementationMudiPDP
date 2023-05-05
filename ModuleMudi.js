@@ -1,4 +1,4 @@
-export const experienceMudi = ({
+const experienceMudi = ({
 
     // Datos del cliente
     numberSku           = null , 
@@ -217,6 +217,10 @@ export const experienceMudi = ({
 
             div.querySelector('.closeModal').addEventListener('click',()=> document.querySelector('.windowModalMudi').remove(), false) ;
 
+            div.querySelector('.initARMudi').addEventListener('click',()=>{
+                window.open(`${linkAR}`,'_BLANK');
+            });  
+
             /* Determinamos que codigo QR se va a visualizar */ 
             linkQRAD == null || linkQRAD == undefined || linkQRAD =='' ?  createQRnormal() :  createQRAdvanced();
                 
@@ -242,3 +246,5 @@ export const experienceMudi = ({
         };
 
 };
+
+
