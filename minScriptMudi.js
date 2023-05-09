@@ -26,7 +26,7 @@ const experienceMudi = ({
 }) => {
 
     // verificaciones de parametros Necesarios
-    if(tokenapi === null || numberSku === null || idCompany == null){
+    if(tokenapi === null || numberSku === null || idCompany == null  ){
         console.error('Los parámetros "tokenapi" "numberSku" "idCompany" deben estar debidamente proporcionados.Porfavor revíselo, si tiene dificultades; consulte al equipo Mudi.')
         return false
     } else if( typeof(intervaleTime) !== 'number'){
@@ -217,6 +217,10 @@ const experienceMudi = ({
 
             div.querySelector('.closeModal').addEventListener('click',()=> document.querySelector('.windowModalMudi').remove(), false) ;
 
+            div.querySelector('.initARMudi').addEventListener('click',()=>{
+                window.open(`${linkAR}`,'_BLANK');
+            });  
+
             /* Determinamos que codigo QR se va a visualizar */ 
             linkQRAD == null || linkQRAD == undefined || linkQRAD =='' ?  createQRnormal() :  createQRAdvanced();
                 
@@ -242,3 +246,5 @@ const experienceMudi = ({
         };
 
 };
+
+
