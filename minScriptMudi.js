@@ -125,6 +125,7 @@ const experienceMudi = ({
     }
 
     /* Create Modals */
+    // Esto es una mierda, lo sé peeeero es por si después tenemos más propuestas de modal :S  igual se evalúa.
     function createModal({type}){
 
         if(type === '3D') { createModal3D() }
@@ -247,4 +248,13 @@ const experienceMudi = ({
 
 };
 
+experienceMudi({ 
+    tokenapi:'pQcNxTF5rZpGZ6fQaGzW',
+    numberSku:`77018588105660` ,
+    idCompany: 0,
+    fatherContainer: document.getElementById('prueba'),
+    flexDirectionBtns   : 'row',
+    color : '#ff6a36',
+    zindexModal : 461
+});
 
