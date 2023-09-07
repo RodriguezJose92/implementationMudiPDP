@@ -249,12 +249,12 @@ const experienceMudi = ({
 };
 
 experienceMudi({ 
-    tokenapi:'pQcNxTF5rZpGZ6fQaGzW',
-    numberSku:`77018588105660` ,
+    tokenapi:'',
+    numberSku:`` ,
     idCompany: 0,
-    fatherContainer: document.getElementById('prueba'),
+    fatherContainer: '',
     flexDirectionBtns   : 'row',
-    color : '#ff6a36',
+    color : '',
     zindexModal : 461
 });
 
