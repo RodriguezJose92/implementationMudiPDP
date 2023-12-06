@@ -38,7 +38,8 @@ function createStyles({idCompany}){
 };
 
 /** Cuando se obtiene una respuesta positiva del server se crean dos botones ( btn3D y btnAR ) */
-function createBtns({father,sku,idCompany,link3D,color,zBtns,zModal}){
+function createBtns({father,sku,idCompany,link3D,color,zBtns,zModal,ButtonsY}){
+  console.log(ButtonsY)
 
   const fatherContainer = father;
   fatherContainer.setAttribute('style','position:relative')
@@ -47,7 +48,7 @@ function createBtns({father,sku,idCompany,link3D,color,zBtns,zModal}){
   const containerPrincipalBtns = document.createElement('DIV');
   containerPrincipalBtns.classList.add('ContainerBtnsMudi');
   containerPrincipalBtns.id="containerBtnsMudi";
-  containerPrincipalBtns.setAttribute('style',`z-index:${zBtns}`)
+  containerPrincipalBtns.setAttribute('style',`z-index:${zBtns}; ${ButtonsY}:0`)
   
   containerPrincipalBtns.innerHTML=`
   <div class="tooltip showTooltipInit">
@@ -186,7 +187,10 @@ async function MudiExperience ({
   color,
 
   zIndexBtns=1,
-  zIndexModal=1
+  zIndexModal=1,
+
+  positionBtnsY='bottom',
+  positionBtnsX= null,
 }) {
 
   const server = await serverData( {token:tokenApi, sku:skuNumber} );
@@ -194,8 +198,6 @@ async function MudiExperience ({
 
   /** Una vez tengamos la respuesta positiva creamos los estilos generales y los botones */
   createStyles({idCompany:idCompanyMudi});
-  createBtns({ father:containerBtns, sku:skuNumber, idCompany:idCompanyMudi, link3D:server.URL_WEB ,color:color, zBtns:zIndexBtns,zModal:zIndexModal});
+  createBtns({ father:containerBtns, sku:skuNumber, idCompany:idCompanyMudi, link3D:server.URL_WEB ,color:color, zBtns:zIndexBtns,zModal:zIndexModal, ButtonsY:positionBtnsY});
   sendDataLayer({sku:skuNumber})
 };
-
-export default MudiExperience; 
