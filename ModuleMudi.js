@@ -39,7 +39,6 @@ function createStyles({idCompany}){
 
 /** Cuando se obtiene una respuesta positiva del server se crean dos botones ( btn3D y btnAR ) */
 function createBtns({father,sku,idCompany,link3D,color,zBtns,zModal,ButtonsY}){
-  console.log(ButtonsY)
 
   const fatherContainer = father;
   fatherContainer.setAttribute('style','position:relative')
@@ -201,3 +200,17 @@ async function MudiExperience ({
   createBtns({ father:containerBtns, sku:skuNumber, idCompany:idCompanyMudi, link3D:server.URL_WEB ,color:color, zBtns:zIndexBtns,zModal:zIndexModal, ButtonsY:positionBtnsY});
   sendDataLayer({sku:skuNumber})
 };
+
+// Ejecución de la función principal ( MAIN )
+MudiExperience({
+  tokenApi:'pQcNxTF5rZpGZ6fQaGzW',
+  skuNumber:'AO152',
+  containerBtns: document.querySelector('.image-container'),
+  idCompanyMudi:0,
+  color:"#00ff00",
+  zIndexBtns:10,
+  zIndexModal:1000000,
+
+  positionBtnsY:'bottom',
+  positionBtnsX: null,
+});
