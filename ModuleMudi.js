@@ -201,16 +201,3 @@ async function MudiExperience ({
   sendDataLayer({sku:skuNumber})
 };
 
-// Ejecución de la función principal ( MAIN )
-MudiExperience({
-  tokenApi:'pQcNxTF5rZpGZ6fQaGzW',
-  skuNumber:'AO152',
-  containerBtns: document.querySelector('.image-container'),
-  idCompanyMudi:0,
-  color:"#00ff00",
-  zIndexBtns:10,
-  zIndexModal:1000000,
-
-  positionBtnsY:'bottom',
-  positionBtnsX: null,
-});
