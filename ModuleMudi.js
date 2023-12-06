@@ -178,7 +178,7 @@ function sendDataLayer({sku}){
 };
 
 // Función Main Mudi --
-async function MudiExperience ({
+export async function MudiExperience ({
   tokenApi,
   skuNumber,
   containerBtns,
