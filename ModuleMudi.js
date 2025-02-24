@@ -1,203 +1,396 @@
-/* Petición SeverMudi */
-async function serverData ({
-  token = undefined,
-  sku = undefined
-}) {
+/** Send Event Interacción  ✔️ */
+function sendEventInteraction(eventName, sku) {
 
-  // Errores
-  if (token == null) { console.error('Error Mudi: Token Api Null') ;  return }
-  if ( sku == null)  { console.error('Error Mudi: SKU Null') ;  return}
+    let OSdevice;
 
-  // Respuesta positiva 
-  let contentBody = { "skus": [`${sku}`] }
+    if (navigator.userAgent.includes('Android')) OSdevice = 'Android';
+    else if (navigator.userAgent.includes('iPhone') || navigator.userAgent.includes('iPad')) OSdevice = "IOS";
+    else OSdevice = 'DESK';
 
-  const req = await fetch ('https://mudiview.mudi.com.co:7443/product/getProductsUrl' , {
-    method:'POST',
-    headers:{
-      'Content-Type': 'application/json',
-      'tokenapi':token
-    },
-    body: JSON.stringify(contentBody)
-  })
-
-  const jsonResponse = await req.json();
-  const finalResponse = jsonResponse.data[0];
-
-  return finalResponse;
-
-};
-
-/** Creamos Los estilos remotos */
-function createStyles({idCompany}){
-  const link = document.createElement('LINK');
-  link.setAttribute('rel','stylesheet');
-  link.id="stylesMudiGeneral";
-  link.href=`https://mudi.com.co/module/mudi/index-${idCompany}.css`; /* Pueden tomarlos de esta ruta */
- 
-  document.head.appendChild(link)
-};
-
-/** Cuando se obtiene una respuesta positiva del server se crean dos botones ( btn3D y btnAR ) */
-function createBtns({father,sku,idCompany,link3D,color,zBtns,zModal,ButtonsY}){
-
-  const fatherContainer = father;
-  fatherContainer.setAttribute('style','position:relative')
-
-  // Creación del contenedor principal para los botones
-  const containerPrincipalBtns = document.createElement('DIV');
-  containerPrincipalBtns.classList.add('ContainerBtnsMudi');
-  containerPrincipalBtns.id="containerBtnsMudi";
-  containerPrincipalBtns.setAttribute('style',`z-index:${zBtns}; ${ButtonsY}:0`)
-  
-  containerPrincipalBtns.innerHTML=`
-  <div class="tooltip showTooltipInit">
-    <p><b>¡Nuevo!</b> prueba nuestras experiencias de 3D y Realidad Aumentada</p>
-  </div>
-  <img src="https://mudi.com.co/cliente/${idCompany}/btn3D.webp" alt="Boton Mudi para activar 3D" class="btnMudi3D" id="btnMudiAR" sku=${sku} title="Haz click para tener una experiencia 3D">
-  <img src="https://mudi.com.co/cliente/${idCompany}/btnAR.webp" alt="Boton Mudi para activar AR" class="btnMudiAR" id="btnMudi3D" sku=${sku} title="Haz click para tener una experiencia de realidad aumentada">`;
-  
-  containerPrincipalBtns.querySelector('.btnMudi3D').addEventListener('click',()=>{ createModal3D({link3D:link3D,color:color,zModal:zModal}) },false);
-  containerPrincipalBtns.querySelector('.btnMudiAR').addEventListener('click',()=>{ createModalAR({color:color, idCompany:idCompany, sku:sku,zModal:zModal}) },false);
-  fatherContainer.appendChild(containerPrincipalBtns);
-
-  setTimeout(()=>{
-    const tool = document.querySelector('.showTooltipInit');
-    tool.classList.remove('showTooltipInit')
-    tool.classList.add('hideTooltip')
-  },10000)
-
-};
-
-/** Creamos el modal 3D */
-function createModal3D({link3D,color,zModal}){
-
-  const div = document.createElement('DIV')
-  div.classList.add('modalMudi')
-  div.id="modalMudi";
-  div.setAttribute('style',`z-index:${zModal}`);
-  div.innerHTML=`
-  <div class="contentModal3D">
-    <h1 class="closeModal" style="color:${color}; text-align:center">X</h1>
-    <iframe class="iframeMudi3D" src="${link3D}"></iframe>
-    <a href="https://mudi.com.co" target="_blank">
-      <img class="powerByMudi3D" src="https://mudi.com.co/Assets/SVG/powerByMudi.webp" type="image/webp" alt="Power By Mudi">
-    </a>
-  </div>`;
-
-  div.querySelector('.closeModal').addEventListener('click',()=>{
-    document.body.querySelector('.modalMudi').remove();
-  })
-
-  document.body.appendChild(div);
-};
-
-/** Creamos el Modal AR */
-function createModalAR({color,idCompany,sku,zModal}){
-  const div = document.createElement('DIV')
-  div.classList.add('modalMudi')
-  div.id="modalMudi";
-  div.setAttribute('style',`z-index:${zModal}`);
-  div.innerHTML=`
-    <div class="contentModalAR">
-        <h1 class="closeModal" style="color:${color}; text-align:center;">X</h1>
-        <h2 class="modalTitleMudi">Recomendaciones para ver el producto en Realidad Aumentada.</h2>
-
-        <div class="principalContentModalAR">
-
-            <div class="fristContentMudi">
-
-                <div class="containerMudiSteps">
-                    <img class="imgStepMudi" src="https://mudi.com.co/cliente/${idCompany}/step1.webp">
-                    <div class="containerStepsText">
-                        <h3 class="stepTitleMudi">Apunta tu teléfono al piso para ver el producto.</h3>
-                        <p class="stepParagrahpMudi">Prueba otro espacio si no puedes ver el producto.</p>
-                    </div>
-                </div>
-
-                <div class="containerMudiSteps">
-                    <img class="imgStepMudi" src="https://mudi.com.co/cliente/${idCompany}/step2.webp">
-                    <div class="containerStepsText">
-                        <h3 class="stepTitleMudi">Desplaza para visualizar.</h3>
-                        <p class="stepParagrahpMudi">Mueve tu dedo en la pantalla para rotar la imagen.</p>
-                    </div>
-                </div>
-
-                <div class="containerMudiSteps">
-                    <img class="imgStepMudi" src="https://mudi.com.co/cliente/${idCompany}/step3.webp">
-                    <div class="containerStepsText">
-                        <h3 class="stepTitleMudi">Amplia y detalla el producto.</h3>
-                        <p class="stepParagrahpMudi">Controla el zoom arrastrando dos dedos en la pantalla de adentro hacia afuera.</p>
-                    </div>
-                </div>
-
-                <div class="containerMudiSteps">
-                    <img class="imgStepMudi" src="https://mudi.com.co/cliente/${idCompany}/step4.webp">
-                    <div class="containerStepsText">
-                        <h3 class="stepTitleMudi">Toca dos veces para restablecer.</h3>
-                        <p class="stepParagrahpMudi">Vuelve al tamaño original haciendo doble click sobre el producto.</p>
-                    </div>
-                </div>
-
-                <button class="initARMudi" style="background-color:${color};">Iniciar AR</button>
-
-            </div>
-
-            <div class="secondContentMudi">
-                <h3 class="stepTitleMudi qrTitlePart"> Escanea el código QR para ver el producto en realidad aumentada.</h3>
-                <div class="containerQRMudi">
-                  <img src="https://chart.apis.google.com/chart?cht=qr&chs=300x300&chl=https%3A%2F%2Fviewer.mudi.com.co%2Fv1%2Far%2F%3Fid%3D${idCompany}%26sku%3D${sku}" class="codeQRMudi">
-                </div>
-                <a class="hrefMudiAR" href="https://mudi.com.co" target="_blank">
-                  <img class="powerByMudiAR" src="https://mudi.com.co/Assets/SVG/powerByMudi.webp" type="image/webp" alt="Power By Mudi">
-                </a>
-            </div>
-
-        </div>
-
-    </div>`;
-
-    div.querySelector('.closeModal').addEventListener('click',()=>{
-      document.body.querySelector('.modalMudi').remove();
-    });
-
-    div.querySelector('.initARMudi').addEventListener('click',()=>{
-      window.open(`https://viewer.mudi.com.co/v1/ar/?id=${idCompany}&sku=${sku}`)
+    window.dataLayer && dataLayer.push({
+        event: `${eventName}`,
+        valorMudi: 1,
+        sku: sku,
+        sistemaOperativo: OSdevice
     })
-
-    document.body.appendChild(div);
 };
 
-/**Envío de data DataLayer */
-function sendDataLayer({sku}){
-  if(!window.dataLayer) window.dataLayer = []
-  else dataLayer.push({
-    event:'MudiEvents',
-    visualMudi:1,
-    sku:sku,
-  });
+/** Modal Mudi */
+class ModalMudi {
+
+    constructor(data, color, currentSKU) {
+
+        this.dataServer = data;
+        this.color = color;
+
+        this.modalMudi = document.createElement("DIV");
+
+        this.currentSize = null;
+        this.currentColor = null;
+        this.currentSKU = currentSKU
+    };
+
+    /** Creación HTML del modal y sus componentes fijos ( btn salida y el iframe)  ✔️ */
+    createModal() {
+
+        const verifyModal = document.querySelector('#modalMudi');
+        verifyModal && verifyModal.remove();
+
+        this.modalMudi.id = `modalMudi`;
+        this.modalMudi.classList.add(`mudiModal`);
+        this.modalMudi.innerHTML = `
+        <div class="iframeMudi3D">
+            <button class="closeModalMudi" style="color:${this.color}">X</button>  
+            <iframe class="modelMudi" src="${this.dataServer.URL_WEB}"></iframe>
+        </div>
+      `;
+
+        /** We close the MUDI modal*/
+        this.modalMudi.querySelector(`.closeModalMudi`).addEventListener("click", () => document.body.querySelector("#modalMudi").remove());
+    };
+
+    /** Creación del boton AR ✔️ */
+    addBtnAR() {
+
+        let flagAR = false;
+
+        const ARButon = document.createElement('DIV');
+        ARButon.classList.add('containerBtnsActions')
+        ARButon.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" id="imgARBtn" class="imgBtnAR" viewBox="0 0 317 112">
+        <defs>
+            <style>
+            .cls-1_modal{fill:${this.color};stroke:${this.color};stroke-miterlimit:10;stroke-width:3px;}
+  
+            .cls-2_modal{font-family:FrutigerBold, Frutiger;font-size:19.04px;fill:white}
+            .cls-3_modal{stroke-width:0px;fill:white;}
+            </style>
+        </defs>
+        
+        <rect class="cls-1_modal" x="9.52" y="9" width="292.07" height="87" rx="40" ry="40"/>
+            <path class="cls-3_modal" d="m42.64,46.07c.66,0,1.19-.53,1.19-1.19v-8.1c0-.66-.53-1.19-1.19-1.19s-1.19.53-1.19,1.19v8.04c0,.66.53,1.19,1.19,1.19"/>
+            <path class="cls-3_modal" d="m59.58,28.25c.21,0,.42-.06.6-.16l6.4-3.67,6.4,3.68c.57.33,1.31.13,1.64-.44.33-.57.13-1.31-.44-1.64h0l-7.13-4.01c-.37-.21-.83-.21-1.19,0l-6.94,4.02c-.57.34-.75,1.07-.41,1.64.23.38.64.6,1.08.58"/>
+            <path class="cls-3_modal" d="m66.5,59.88c.66,0,1.19-.53,1.19-1.19v-8.03c0-.66-.54-1.2-1.2-1.2s-1.2.54-1.2,1.2v8.04c0,.66.53,1.19,1.19,1.19"/>
+            <path class="cls-3_modal" d="m90.39,46.07c.66,0,1.19-.53,1.19-1.19,0,0,0,0,0-.01v-8.09c0-.66-.53-1.19-1.19-1.19s-1.19.53-1.19,1.19v8.04c0,.66.53,1.19,1.19,1.19"/>
+            <path class="cls-3_modal" d="m42.64,65.58c.66,0,1.19-.53,1.19-1.19v-7.99c0-.66-.53-1.19-1.19-1.19s-1.19.53-1.19,1.19v8.04c.03.64.56,1.14,1.19,1.14Z"/>
+            <path class="cls-3_modal" d="m90.39,65.58c.64,0,1.17-.5,1.19-1.14v-8.04c0-.66-.53-1.19-1.19-1.19s-1.19.53-1.19,1.19h0v8.04c.03.64.56,1.14,1.19,1.14"/>
+            <path class="cls-3_modal" d="m66.5,33.02c.66,0,1.19-.53,1.19-1.19v-8.77c0-.66-.54-1.2-1.2-1.2s-1.2.54-1.2,1.2v8.77c0,.66.53,1.19,1.19,1.19"/>
+            <path class="cls-3_modal" d="m66.5,79.45c.66,0,1.19-.53,1.19-1.19h0v-8.04c0-.66-.54-1.2-1.2-1.2s-1.2.54-1.2,1.2v8.04c0,.66.53,1.19,1.19,1.19,0,0,0,0,.01,0"/>
+            <path class="cls-3_modal" d="m66.5,79.45c.21,0,.42-.06.6-.16l7-4.04c.57-.33.77-1.06.44-1.64-.33-.57-1.06-.77-1.64-.44h0l-6.4,3.7-6.3-3.66c-.57-.33-1.31-.14-1.64.44s-.14,1.31.44,1.64l6.91,4c.18.11.39.16.6.16"/>
+            <path class="cls-3_modal" d="m66.5,51.83c.19,0,.37-.04.54-.12l6.97-4.02c.57-.33.77-1.06.44-1.64-.33-.57-1.06-.77-1.64-.44l-6.4,3.68-6.4-3.68c-.57-.33-1.31-.14-1.64.44s-.14,1.31.44,1.64h0l7.08,4.02c.18.11.39.16.6.16"/>
+            <path class="cls-3_modal" d="m49.61,42.05c.66.01,1.2-.52,1.21-1.18,0-.44-.23-.85-.62-1.06l-6.95-4.02c-.59-.3-1.31-.07-1.61.52-.28.54-.1,1.2.4,1.54l6.95,4.02c.18.1.39.16.6.16"/>
+            <path class="cls-3_modal" d="m42.65,38.03c.21,0,.42-.06.6-.16l6.97-4.02c.57-.33.77-1.06.44-1.64s-1.06-.77-1.64-.44h0l-6.97,4.02c-.58.32-.79,1.05-.47,1.62.21.39.62.62,1.06.62"/>
+            <path class="cls-3_modal" d="m83.42,42.05c.21,0,.42-.06.6-.16l6.97-4.04c.57-.33.77-1.06.44-1.64-.33-.57-1.06-.77-1.64-.44l-6.95,4.02c-.58.32-.79,1.05-.47,1.62.21.39.62.62,1.06.62"/><path class="cls-3_modal" d="m90.39,38.03c.66.01,1.2-.52,1.21-1.18,0-.44-.23-.85-.62-1.06l-6.95-4.01c-.57-.33-1.31-.13-1.64.44-.33.57-.13,1.31.44,1.64l6.95,3.99c.18.1.39.16.6.16"/>
+            <path class="cls-3_modal" d="m49.62,69.66c.66.01,1.2-.52,1.21-1.18,0-.44-.23-.85-.62-1.06l-6.98-3.97c-.57-.33-1.31-.13-1.64.44s-.13,1.31.44,1.64h0l6.98,3.97c.18.1.39.16.6.16"/>
+            <path class="cls-3_modal" d="m42.64,65.58c.21,0,.42-.06.6-.16l6.97-4.02c.57-.33.77-1.06.44-1.64-.33-.57-1.06-.77-1.64-.44h0l-6.97,4.13c-.58.32-.79,1.05-.47,1.62.21.39.62.62,1.06.62"/>
+            <path class="cls-3_modal" d="m83.42,69.66c.21,0,.42-.06.6-.16l6.97-4.02c.51-.42.57-1.18.15-1.68-.33-.39-.87-.53-1.35-.34l-6.95,4.02c-.58.32-.79,1.05-.47,1.62.21.39.62.62,1.06.62"/>
+            <path class="cls-3_modal" d="m90.39,65.58c.66.01,1.2-.52,1.21-1.18,0-.44-.23-.85-.62-1.06l-6.94-4.02c-.57-.33-1.31-.14-1.64.44-.33.57-.14,1.31.44,1.64l6.94,4.07c.18.1.39.16.6.16"/>
+    
+            <text class="cls-2_modal" transform="translate(103.37 58.47)"><tspan x="0" y="0">VER EN TU ESPACIO</tspan></text>
+        </svg>
+  
+        <div id="containerQR" class="containerQRMudi" style="background-color:${this.color}">
+            <img class="mudiQR" src="${this.dataServer.URL_QR}" >
+  
+            <div class="containerText">
+                <div class="titleContainer">
+                    <h4>ESCANÉAME PARA <br><b>VER EN TU ESPACIO</b></h4>
+                    <hr class="hrTitle">
+                </div>
+  
+                <div class="titleContainer">
+                    <div class="iconTitle">
+                        <img class="stepMudi step1" src="https://cdn.jsdelivr.net/gh/RodriguezJose92/implementationMudiPDP@latest/assets/step3amoblando.webp">
+                    </div>
+                    <p class="textInfoMudi">Apunta el teléfono al piso.</p>
+                </div>
+  
+                <div class="titleContainer">
+                    <div class="iconTitle">
+                        <img class="stepMudi step2" src="https://cdn.jsdelivr.net/gh/RodriguezJose92/implementationMudiPDP@latest/assets/step4amoblando.webp">
+                    </div>
+                    <p class="textInfoMudi">Desplaza para visualizar.</p>
+                </div>
+  
+                <div class="titleContainer">
+                    <div class="iconTitle">
+                        <img class="stepMudi step3" src="https://cdn.jsdelivr.net/gh/RodriguezJose92/implementationMudiPDP@latest/assets/step2amoblando.webp">
+                    </div>
+                    <p class="textInfoMudi">Amplia y detalla el producto.</p>
+                </div>
+  
+                <div class="titleContainer">
+                    <div class="iconTitle">
+                        <img class="stepMudi step4" src="https://cdn.jsdelivr.net/gh/RodriguezJose92/implementationMudiPDP@latest/assets/step1amoblando.webp">
+                    </div>
+                    <p class="textInfoMudi">Toca dos veces para restablecer.</p>
+                </div>
+  
+            </div>
+        </div>
+      `;
+
+        /** Verify Style Bttn AR  */
+        function changeStyleBtnAR(flagAR, color) {
+            let icon = document.body.querySelectorAll(".cls-3_modal");
+
+            flagAR
+                ? ((document.body.querySelector(".cls-1_modal").style.fill = color),
+                    icon.forEach((icon) => (icon.style.fill = "white")),
+                    (document.body.querySelector(".cls-2_modal").style.fill = "white"))
+                : ((document.body.querySelector(".cls-1_modal").style.fill = "white"),
+                    icon.forEach((icon) => (icon.style.fill = color)),
+                    (document.body.querySelector(".cls-2_modal").style.fill = color));
+        };
+
+        ARButon.querySelector(`#imgARBtn`).addEventListener("click", () => {
+            if (window.innerWidth > 1000) {
+                !flagAR
+                    ? ((document.body.querySelector(".containerQRMudi").style.right =
+                        "15%"),
+                        changeStyleBtnAR(flagAR, this.color),
+                        (flagAR = !flagAR))
+                    : ((document.body.querySelector(".containerQRMudi").style.right =
+                        "-150%"),
+                        changeStyleBtnAR(flagAR, this.color),
+                        (flagAR = !flagAR));
+            } else {
+                window.open(`${this.dataServer.URL_AR}`, "_BLANK");
+            }
+            flagAR && sendEventInteraction("Evento de interaccion AR", this.currentSKU);
+        });
+
+        /** Agregamos al modal  */
+        this.modalMudi.querySelector('.iframeMudi3D') && this.modalMudi.querySelector('.iframeMudi3D').appendChild(ARButon)
+
+    };
+
+    createModalPDP() {
+
+        this.createModal();
+        this.addBtnAR();
+
+        document.body.appendChild(this.modalMudi)
+    };
+
 };
 
-// Función Main Mudi --
-async function MudiExperience ({
-  tokenApi,
-  skuNumber,
-  containerBtns,
-  idCompanyMudi,
-  color,
+/** Botón 3D */
+class BTN3D {
 
-  zIndexBtns=1,
-  zIndexModal=1,
+    constructor(skuNumber, color) {
 
-  positionBtnsY='bottom',
-  positionBtnsX= null,
-}) {
+        this.btn3D;
 
-  const server = await serverData( {token:tokenApi, sku:skuNumber} );
-  if(server==undefined){ console.warn(`El producto identificado con el SKU: "%c${skuNumber}%c" en Mudi 3D&AR Commerce, no tiene 3D ni AR`, 'color: red; font-weight: bold', 'color: black;'); return };
+        this.skuNumber = skuNumber;
+        this.color = color;
+    }
 
-  /** Una vez tengamos la respuesta positiva creamos los estilos generales y los botones */
-  createStyles({idCompany:idCompanyMudi});
-  createBtns({ father:containerBtns, sku:skuNumber, idCompany:idCompanyMudi, link3D:server.URL_WEB ,color:color, zBtns:zIndexBtns,zModal:zIndexModal, ButtonsY:positionBtnsY});
-  sendDataLayer({sku:skuNumber})
+    /** Creates */
+    create({ data }) {
+
+        document.querySelector('.btnsMudiContainer') && document.querySelector('.btnsMudiContainer').remove();
+
+        /** Create Fragment */
+        const btn3D = document.createDocumentFragment();
+
+        /** Create containers */
+        const containerBtn = document.createElement("DIV");
+        containerBtn.classList.add("btnsMudiContainer");
+        containerBtn.appendChild(this.createTooltip());
+        containerBtn.setAttribute("skuNumber", this.skuNumber);
+        containerBtn.innerHTML += `
+            <?xml version="1.0" encoding="UTF-8"?>
+                <svg id="img3DBtn" class="btnMudi3D" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 360">
+                    <defs>
+                        <style>
+                            .cls-1{
+                                fill:${this.color};
+                                opacity:.6;
+                            }
+                            
+                            .cls-1,.cls-2,.cls-3{
+                                stroke-width:0px;
+                            }
+                            .cls-2{
+                                fill:#f4f4f4;
+                            }
+                            .cls-3{
+                                fill:${this.color};
+                            }
+                        </style>
+                    </defs>
+                    <circle class="cls-2" cx="170" cy="178.45" r="150.5"/>
+                    <g id="vert3b-thumb">
+                        <path id="Shape" class="cls-1" d="m270.61,176.12c0-20.59-22.41-38-55.68-46.34-8.14-34.05-25.18-56.97-45.29-56.97s-37.14,22.96-45.3,57.04c-4.71,1.2-9.26,2.58-13.59,4.16-1.88.69-2.86,2.8-2.18,4.72.67,1.92,2.74,2.92,4.62,2.24,3.04-1.11,6.21-2.08,9.45-2.98-.41,2.27-.77,4.53-1.11,6.84h.19c-3.33,22.19-3.12,44.79.61,66.91h-.09c.15.81.28,1.65.43,2.49v.04c-27.7-7.79-46.71-22.1-46.72-38.07,0-8.41,5.43-16.79,15.41-24.01l-1.15,6.06h0c-.19.97,0,1.97.54,2.79.54.82,1.37,1.38,2.32,1.57h0c.23.05.46.07.69.07,1.72-.02,3.2-1.26,3.54-2.99l2.9-15.36h0c.18-.96-.01-1.95-.55-2.76-.53-.81-1.36-1.37-2.3-1.55h0l-15.07-3.11c-1.94-.41-3.85.84-4.3,2.82-.1.48-.1.98,0,1.46.26,1.46,1.35,2.63,2.77,2.95h.17l7.05,1.4c-12.44,8.79-19.31,19.49-19.31,30.6h0c0,20.59,22.41,38,55.68,46.35,8.16,34.04,25.18,56.96,45.29,56.96,11.18,0,21.93-7.46,30.61-20.88l.9,7.36c.24,2.02,2.04,3.46,4.01,3.22,1.98-.25,3.38-2.08,3.14-4.11h0l-1.82-15.54c-.11-.97-.6-1.86-1.35-2.46-.75-.61-1.71-.88-2.66-.76h0l-15.19,1.87c-1.97.25-3.38,2.09-3.14,4.1h0c.24,2.02,2.03,3.46,4.01,3.22l5.99-.74c-7.26,11.15-15.84,17.31-24.45,17.31-15.61,0-29.58-19.46-37.21-47.77,12.27,2.37,24.73,3.55,37.21,3.51,12.51.04,24.99-1.15,37.28-3.53-.89,3.31-1.82,6.56-2.91,9.66-.16.47-.23.96-.19,1.45.09,1.76,1.38,3.2,3.08,3.45s3.34-.77,3.91-2.43h0c1.54-4.43,2.89-9.09,4.07-13.91,33.31-8.35,55.75-25.76,55.75-46.35h0l-.03.03Zm-53.98,38.09c2.35-12.55,3.52-25.3,3.49-38.08h0c.04-12.77-1.11-25.51-3.43-38.06,27.69,7.8,46.7,22.1,46.71,38.07,0,15.97-19.05,30.27-46.76,38.07h0Zm-84.21-86.17c7.61-28.35,21.6-47.83,37.22-47.83s29.58,19.45,37.21,47.78c-1.12-.22-2.22-.41-3.34-.62v.14c-11.19-2.01-22.53-3.03-33.89-3.03-10.91.03-21.79,1-32.54,2.89l.07-.2c-1.57.28-3.15.57-4.73.88Zm76.36,8.03c2.77,13.16,4.15,26.6,4.12,40.06.04,13.45-1.31,26.88-4.05,40.04-12.89,2.84-26.04,4.26-39.22,4.22-13.16.04-26.29-1.38-39.15-4.21v-.15c-5.48-26.38-5.48-53.65,0-80.04,25.82-5.54,52.49-5.52,78.3.07h0Z"/>
+                        <path id="Path" class="cls-3" d="m122.61,187.91c4.2,4.12,9.83,6.44,15.7,6.49,6.91,0,10.75-2.98,10.75-7.34,0-4.61-3.51-6.75-11.43-6.75-2.39,0-6.24,0-7.09.09v-10.59c1.02.08,4.86.08,7.09.08,6.31,0,10.5-2.05,10.5-6.31,0-4.52-4.61-6.83-10.58-6.83-5.43,0-10.65,2.14-14.51,5.97l-5.98-7.51c5.57-6.07,13.53-9.38,21.76-9.06,13.31,0,21.51,5.97,21.51,15.44-.45,6.78-5.7,12.26-12.46,12.98,7.27.48,13.01,6.37,13.31,13.65,0,9.81-8.79,16.73-22.44,16.73-8.47.46-16.7-2.88-22.45-9.12l6.32-7.94Z"/>
+                        <path id="Shape-2" class="cls-3" d="m170.32,147.04h22.45c17.83,0,30.21,11.35,30.21,28.51s-12.38,28.42-30.21,28.42h-22.45v-56.93Zm22.45,46.26c4.78.23,9.44-1.56,12.84-4.94,3.39-3.38,5.21-8.03,4.99-12.81.36-4.83-1.41-9.58-4.83-13-3.42-3.43-8.17-5.19-13-4.84h-10.33v35.59h10.33Z"/>
+                    </g>
+                </svg>
+            `;
+
+        containerBtn.querySelector("#img3DBtn").addEventListener("click", () => {
+
+            const modal = new ModalMudi(data, this.color, this.skuNumber);
+            modal.createModalPDP()
+
+            /** Enviamos el evento al GTM */
+            sendEventInteraction("Evento de interaccion 3D", this.skuNumber);
+
+        });
+
+        this.btn3D = btn3D;
+        btn3D.appendChild(containerBtn);
+
+        sendEventInteraction("visualizacion_botones", this.skuNumber);
+
+        /** Add DOM */
+        return btn3D;
+
+    }
+
+    createTooltip() {
+        const tooltip = document.createElement("P");
+        tooltip.classList.add("tooltipMudi");
+        tooltip.innerHTML = `<b>¡Nuevo!</b> Descubre como se ve este producto en 3D y realidad aumentada en tu espacio`;
+        setTimeout(() => {
+            document.body.querySelector('.tooltipMudi') && this.deleteTooltip();
+        }, 9000);
+        return tooltip;
+    };
+
+    /** Deletes */
+    deleteTooltip() {
+        document.body.querySelector(".tooltipMudi").style.opacity = 0
+        setTimeout(() => document.body.querySelector(".tooltipMudi").remove(), 1500)
+    };
+
+    deleteBtn() {
+        if (this.btn3D) {
+            this.btn3D.style.opacity = 0;
+            setTimeout(() => this.btn3D.remove(), 1500)
+        }
+    };
+
 };
 
+/** Verificador de dispositivo x ancho de la pantalla */
+class verifyDevice {
+    constructor() { };
+
+    static verifyDevice() {
+
+        if (window.innerWidth <= 600) {
+            return "mobile"
+        } else if (window.innerWidth > 600 && window.innerWidth <= 1024) {
+            return "tablet"
+        } else if (window.innerWidth > 1025) {
+            return "desk"
+        }
+
+    }
+}
+
+/** Consulta al servidor y creación de estilos */
+class MudiExperiencePDP {
+
+    constructor() {
+
+        /** Reference node HTML father , node Container Btn 3D  */
+        this.fatherContainer;
+
+        /** Response Mudi-Server*/
+        this.dataServer;
+
+        this.colorClient = "#00c4ff";
+    };
+
+    /** Conect mudiServer  ✔️ */
+    async conectServer(skuNumber) {
+
+        const myBody = { skus: [skuNumber] };
+        this.skuNumber = skuNumber;
+
+        try {
+            /** We make the request to the MUDI server */
+            const request = await fetch(
+                "https://mudiview.mudi.com.co:7443/product/getProductsUrl",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                        tokenapi: "7VtxREtMtUt9CHL9zwbF",
+                    },
+                    body: JSON.stringify(myBody),
+                }
+            );
+            const response = await request.json();
+
+            if (response.data.length == 0) {
+                console.warn(`El sku ${this.skuNumber} no existe en la base de datos de Mudi - FROM CONECT SERVER - `);
+                this.dataServer = null;
+                return
+            };
+
+            this.dataServer = response.data[0];
+
+        } catch (error) {
+            throw error
+        };
+
+    };
+
+    /** Create Styles ✔️ */
+    createStyles() {
+        /** Verify element HTML */
+        if (document.head.querySelector("#stylesMudiGeneral")) { return }
+
+        const link = document.createElement("LINK");
+        link.setAttribute("rel", "stylesheet");
+        link.id = "stylesMudiGeneral";
+        link.href = `https://cdn.jsdelivr.net/gh/mudi-3D/tienda-celsia@latest/index.css`; /* custom this path */
+
+        document.head.appendChild(link);
+    };
+
+    async experienceOn(skuNumber, fatherContainer = {}) {
+        const sizeDevice = verifyDevice.verifyDevice();
+
+        const cleanSku = String(skuNumber).trim().replace(/\s+/g, '');
+
+        /** Verify father Container */
+        this.fatherContainer = fatherContainer;
+
+        try {
+            await this.conectServer(`${cleanSku}`);
+
+            if (!this.dataServer || this.dataServer.length === 0) {
+                console.warn(`El SKU: ${cleanSku} no está en MudiView - FROM EXPERIENCEON -`);
+                return;
+            }
+
+            this.createStyles();
+            const btn3D = new BTN3D(cleanSku, this.colorClient).create({ data: this.dataServer });
+
+            if (fatherContainer[sizeDevice]) {
+                fatherContainer[sizeDevice].appendChild(btn3D);
+            } else {
+                console.warn(`No se encontró un contenedor padre para el dispositivo: ${sizeDevice}`);
+            };
+
+        } catch (error) {
+            console.error(`Mudi Error:\n${error}`);
+        }
+    }
+
+
+};
+
+const mudiExperience = new MudiExperiencePDP();
+setTimeout(() => {
+    mudiExperience.experienceOn(document.querySelector('.skuReference').innerHTML, {
+        desk: document.querySelector('.image-container.slick-initialized.slick-slider'),
+        tablet: document.querySelector('.image-container.slick-initialized.slick-slider'),
+        mobile: document.querySelector('.image-container.slick-initialized.slick-slider')
+    })
+}, 1500)
