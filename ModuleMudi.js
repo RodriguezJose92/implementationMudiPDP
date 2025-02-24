@@ -348,7 +348,7 @@ class MudiExperiencePDP {
         const link = document.createElement("LINK");
         link.setAttribute("rel", "stylesheet");
         link.id = "stylesMudiGeneral";
-        link.href = `https://cdn.jsdelivr.net/gh/mudi-3D/implementationMudiPDP@latest/index.css`; /* custom this path */
+        link.href = `https://cdn.jsdelivr.net/gh/mudi-3D/implementationMudiPDP@latest/style.css`; /* custom this path */
 
         document.head.appendChild(link);
     };
