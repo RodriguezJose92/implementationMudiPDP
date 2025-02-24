@@ -14,4 +14,4 @@ jobs:
 
       - name: Release to jsDelivr
         run: |
-          curl -X PURGE https://purge.jsdelivr.net/npm/RodriguezJose92/electroJaponesaImplementacion@latest
+          curl -X PURGE https://purge.jsdelivr.net/npm/RodriguezJose92/implementationMudiPDP@latest
